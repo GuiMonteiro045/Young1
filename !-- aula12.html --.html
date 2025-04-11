@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aula 12 - Classes, Objetos e Banco de Dados</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 30px 0;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+    header p {
+      margin: 5px 0 0;
+      font-size: 1.2em;
+    }
+    nav {
+      background-color: #e0e7ff;
+      padding: 10px 10%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    nav a {
+      text-decoration: none;
+      color: #1e3a8a;
+      font-weight: bold;
+      margin: 5px;
+    }
+    main {
+      padding: 20px 10%;
+    }
+    section {
+      background-color: white;
+      padding: 25px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #1e3a8a;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 15px;
+      border-left: 4px solid #1e3a8a;
+      overflow-x: auto;
+      border-radius: 6px;
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .desafio {
+      background-color: #fef3c7;
+      padding: 15px;
+      border-left: 5px solid #f59e0b;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+    footer {
+      background: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    iframe {
+      width: 100%;
+      height: 400px;
+      margin-top: 15px;
+      border-radius: 10px;
+    }
+    .quiz {
+      margin-top: 20px;
+    }
+    .quiz-question {
+      font-weight: bold;
+    }
+    .quiz-options label {
+      display: block;
+      margin: 5px 0;
+    }
+    .btn-submit {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Aula 12 - Classes, Objetos e Banco de Dados</h1>
+    <p>Curso Ctrl+Young - Python Avançado</p>
+  </header>
+
+  <nav>
+    <a href="#objetivos">Objetivos</a>
+    <a href="#poo">POO</a>
+    <a href="#bd">Banco de Dados</a>
+    <a href="#sqlite">Exemplo SQLite</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#desafio">Desafio</a>
+  </nav>
+
+  <main>
+    <section id="objetivos">
+      <h2>Objetivos</h2>
+      <ul>
+        <li>Compreender o que são classes e objetos</li>
+        <li>Explorar os pilares da Programação Orientada a Objetos</li>
+        <li>Entender o conceito de banco de dados e sua importância</li>
+        <li>Utilizar SQLite em aplicações Python</li>
+        <li>Armazenar objetos diretamente em um banco de dados</li>
+      </ul>
+    </section>
+
+    <section id="poo">
+      <h2>Programação Orientada a Objetos (POO)</h2>
+      <p>A Programação Orientada a Objetos é um dos paradigmas mais poderosos e utilizados na atualidade. Ao invés de pensarmos em funções soltas, organizamos nosso código em objetos — pequenas “caixinhas” que possuem estado (atributos) e comportamento (métodos).</p>
+      <p>O conceito de classe funciona como um molde para criar diversos objetos com características e comportamentos semelhantes. Um objeto é uma instância concreta de uma classe.</p>
+      <pre><code class="language-python">class Aluno:
+    def __init__(self, nome, idade, nota):
+        self.nome = nome
+        self.idade = idade
+        self.nota = nota
+
+    def exibir(self):
+        print(f"Aluno: {self.nome}, Idade: {self.idade}, Nota: {self.nota}")</code></pre>
+
+      <h3>Vídeo explicativo:</h3>
+      <iframe src="https://www.youtube.com/embed/pmN9ExDf3yQ" title="POO Python" allowfullscreen></iframe>
+    </section>
+
+    <section id="bd">
+      <h2>Banco de Dados</h2>
+      <p>Um banco de dados é um sistema para armazenar, organizar e recuperar dados de forma eficiente. É fundamental para qualquer sistema moderno que lide com informações persistentes.</p>
+      <p>O SQLite é um banco de dados leve, integrado diretamente com o Python e ideal para projetos pequenos e médios. Ele armazena os dados em um único arquivo local.</p>
+      <ul>
+        <li><strong>Tabela:</strong> estrutura de dados com linhas e colunas</li>
+        <li><strong>Campo:</strong> cada coluna da tabela (ex: nome, idade...)</li>
+        <li><strong>Registro:</strong> cada linha da tabela</li>
+        <li><strong>SQL:</strong> linguagem utilizada para manipular os dados (inserir, buscar, atualizar...)</li>
+      </ul>
+    </section>
+
+    <section id="sqlite">
+      <h2>Usando SQLite no Python</h2>
+      <p>Veja como criar uma tabela e inserir dados:</p>
+      <pre><code class="language-python">import sqlite3
+
+conexao = sqlite3.connect("escola.db")
+cursor = conexao.cursor()
+
+cursor.execute('''
+  CREATE TABLE IF NOT EXISTS alunos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT,
+    idade INTEGER,
+    nota REAL
+  )
+''')
+
+cursor.execute('''
+  INSERT INTO alunos (nome, idade, nota)
+  VALUES (?, ?, ?)
+''', ("Ana", 14, 8.5))
+
+conexao.commit()
+conexao.close()</code></pre>
+
+      <h3>Classe integrada ao banco de dados:</h3>
+      <pre><code class="language-python">class Aluno:
+    def __init__(self, nome, idade, nota):
+        self.nome = nome
+        self.idade = idade
+        self.nota = nota
+
+    def salvar(self):
+        conexao = sqlite3.connect("escola.db")
+        cursor = conexao.cursor()
+        cursor.execute('''
+            INSERT INTO alunos (nome, idade, nota)
+            VALUES (?, ?, ?)
+        ''', (self.nome, self.idade, self.nota))
+        conexao.commit()
+        conexao.close()</code></pre>
+    </section>
+
+    <section id="quiz">
+      <h2>Quiz Interativo</h2>
+      <div class="quiz">
+        <p class="quiz-question">1. Qual comando usamos para conectar ao SQLite?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q1" value="a"> connect.database()</label>
+          <label><input type="radio" name="q1" value="b"> sqlite3.open()</label>
+          <label><input type="radio" name="q1" value="c"> sqlite3.connect()</label>
+        </div>
+
+        <p class="quiz-question">2. O que é uma classe em Python?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q2" value="a"> Um tipo de variável</label>
+          <label><input type="radio" name="q2" value="b"> Um molde para criar objetos</label>
+          <label><input type="radio" name="q2" value="c"> Uma função decoradora</label>
+        </div>
+
+        <p class="quiz-question">3. O que representa um objeto?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q3" value="a"> Uma função</label>
+          <label><input type="radio" name="q3" value="b"> Uma instância de uma classe</label>
+          <label><input type="radio" name="q3" value="c"> Uma biblioteca externa</label>
+        </div>
+
+        <p class="quiz-question">4. Qual o comando SQL para criar uma tabela?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q4" value="a"> INSERT INTO</label>
+          <label><input type="radio" name="q4" value="b"> SELECT * FROM</label>
+          <label><input type="radio" name="q4" value="c"> CREATE TABLE</label>
+        </div>
+
+        <p class="quiz-question">5. O que faz o método commit()?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q5" value="a"> Fecha o banco de dados</label>
+          <label><input type="radio" name="q5" value="b"> Confirma as alterações</label>
+          <label><input type="radio" name="q5" value="c"> Cria uma nova tabela</label>
+        </div>
+
+        <p class="quiz-question">6. Como armazenar um objeto no banco?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q6" value="a"> Usando o método print()</label>
+          <label><input type="radio" name="q6" value="b"> Transformando os atributos em dados SQL</label>
+          <label><input type="radio" name="q6" value="c"> Salvando como imagem</label>
+        </div>
+
+        <p class="quiz-question">7. Em que arquivo o SQLite armazena os dados?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q7" value="a"> .sqlite</label>
+          <label><input type="radio" name="q7" value="b"> .db</label>
+          <label><input type="radio" name="q7" value="c"> .txt</label>
+        </div>
+
+        <button class="btn-submit" onclick="checkQuiz()">Verificar Respostas</button>
+        <p id="quiz-result"></p>
+      </div>
+
+      <script>
+        function checkQuiz() {
+          const respostasCorretas = ['c', 'b', 'b', 'c', 'b', 'b', 'b'];
+          let corretas = 0;
+
+          for (let i = 1; i <= respostasCorretas.length; i++) {
+            const resposta = document.querySelector(`input[name="q${i}"]:checked`);
+            if (resposta && resposta.value === respostasCorretas[i - 1]) {
+              corretas++;
+            }
+          }
+
+          const resultado = document.getElementById('quiz-result');
+          resultado.textContent = `Você acertou ${corretas} de ${respostasCorretas.length} perguntas.`;
+        }
+      </script>
+    </section>
+
+    <section id="desafio">
+      <h2>Desafio do Aluno</h2>
+      <div class="desafio">
+        Crie uma classe chamada <code>Livro</code> com os atributos <strong>titulo</strong>, <strong>autor</strong> e <strong>ano</strong>. Adicione um método <code>salvar()</code> que armazena os dados no banco de dados <code>biblioteca.db</code>.
+        <pre><code class="language-python">class Livro:
+    def __init__(self, titulo, autor, ano):
+        self.titulo = titulo
+        self.autor = autor
+        self.ano = ano
+
+    def salvar(self):
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS livros (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                titulo TEXT,
+                autor TEXT,
+                ano INTEGER
+            )
+        ''')
+        cursor.execute('''
+            INSERT INTO livros (titulo, autor, ano)
+            VALUES (?, ?, ?)
+        ''', (self.titulo, self.autor, self.ano))
+        conexao.commit()
+        conexao.close()</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>Reflexão Final</h2>
+      <p>Entender como estruturar seu código com POO e conectar isso com persistência de dados via banco de dados é um grande passo para se tornar um programador mais completo. Pense nos sistemas ao seu redor: redes sociais, lojas virtuais, sistemas de escola… Todos eles usam esses dois conhecimentos juntos! 🚀</p>
+    </section>
+
+    <section>
+      <h2>Próxima Aula</h2>
+      <p>Na próxima aula, vamos mergulhar nos <strong>Pilares da Programação Orientada a Objetos</strong>: Abstração, Encapsulamento, Herança e Polimorfismo. Te espero lá!</p>
+    </section>
+  </main>
+
+  <footer>
+    Desenvolvido por Ctrl+Young • Explorando Python com Banco de Dados
+  </footer>
+</body>
+</html>
